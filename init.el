@@ -199,6 +199,24 @@
 (setq scroll-step 1) ;; keyboard scroll one line at a time
 (setq scroll-conservatively 10000)
 
+;;setSQL connection
+(setq sql-connection-alist
+      '((gt (sql-product 'postgres)
+     (sql-server "localhost")
+     (sql-port 5432)
+     (sql-user "test")
+     (sql-database "gt"))))
+;; multiple cursors
+(use-package multiple-cursors
+  :ensure t
+  :config
+  ;(global-set-key (kbd "C-x .") 'mc/mark-next-like-this)
+  ;(global-set-key (kbd "C-x ,") 'mc/mark-previous-like-this)
+  ;(global-set-key (kbd "C-x /") 'mc/mark-all-dwim)
+  (global-set-key (kbd "C-S-x C-S-x") 'mc/edit-lines)
+  (defun mce ()
+    (interactive)
+    (mc/edit-lines)))
 
 (global-set-key (kbd "C-=") (lambda () (interactive) (text-scale-increase 0.5)))
 (global-set-key (kbd "C--") (lambda () (interactive) (text-scale-increase -0.5)))
@@ -206,6 +224,10 @@
 
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 (global-set-key [f7] 'toggle-truncate-lines)
+
+(add-to-list 'load-path "/home/kostas/emacs-libs/neotree")
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
 
 (require 'kebab)
 
@@ -218,10 +240,36 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet))))
+    (highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(show-paren-match ((t (:foreground "gray100" :background "#9c7618" :weight bold)))))
+ '(show-paren-match ((t (:foreground "gray100" :background "#9c7618" :weight bold))))
+ '(undo-tree-visualizer-active-branch-face ((t (:background "#002b36" :foreground "gray95" :weight bold)))))
+
+(use-package highlight-symbol
+  :diminish highlight-symbol-mode
+  :ensure t
+  :no-require t
+  :init
+  (add-hook 'lisp-mode-hook 'highlight-symbol-mode)
+  (add-hook 'emacs-lisp-mode-hook 'highlight-symbol-mode)
+  (add-hook 'scheme-mode-hook 'highlight-symbol-mode)
+  (add-hook 'cider-repl-mode-hook 'highlight-symbol-mode)
+  (add-hook 'clojure-mode-hook 'highlight-symbol-mode)
+  (add-hook 'sql-mode-hook 'highlight-symbol-mode)
+  (global-set-key (kbd "C-,") 'highlight-symbol-prev)
+  (global-set-key (kbd "C-.") 'highlight-symbol-next)
+  (defun highlight-symbol-count (&optional symbol)
+    "(Do not) Print the number of occurrences of symbol at point."
+    (interactive))
+  :config
+  (setq highlight-symbol-idle-delay 1)
+  (setq highlight-symbol-on-navigation-p 't)
+  (setq highlight-symbol-occurrence-message (quote (explicit)))
+  (custom-set-faces
+   '(highlight-symbol-face ((t (:foreground "gray100" :background "#9c7618" :weight semi-bold))))))
+
+(setq auto-revert-verbose nil)
