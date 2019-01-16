@@ -150,7 +150,7 @@
   (setq cider-repl-history-size 3000)
   (setq cider-show-error-buffer 'except-in-repl)
   (setq cider-repl-display-help-banner nil)
-  (setq cider-inject-dependencies-at-jack-in nil)
+  (setq cider-inject-dependencies-at-jack-in t)
   (setq nrepl-prompt-to-kill-server-buffer-on-quit nil)
 
   (bind-key "C-c M-o" 'cider-repl-clear-buffer cider-repl-mode-map))
@@ -218,6 +218,10 @@
     (interactive)
     (mc/edit-lines)))
 
+;; Line numbering in the margin
+(setq global-linum-mode t)
+
+
 (global-set-key (kbd "C-=") (lambda () (interactive) (text-scale-increase 0.5)))
 (global-set-key (kbd "C--") (lambda () (interactive) (text-scale-increase -0.5)))
 (global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
@@ -240,12 +244,14 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet))))
+    (highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet)))
+ '(safe-local-variable-values (quote ((cider-clojure-cli-global-options . "-A:dev")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(highlight-symbol-face ((t (:foreground "gray100" :background "#9c7618" :weight semi-bold))))
  '(show-paren-match ((t (:foreground "gray100" :background "#9c7618" :weight bold))))
  '(undo-tree-visualizer-active-branch-face ((t (:background "#002b36" :foreground "gray95" :weight bold)))))
 
