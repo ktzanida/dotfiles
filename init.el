@@ -255,6 +255,14 @@
  '(show-paren-match ((t (:foreground "gray100" :background "#9c7618" :weight bold))))
  '(undo-tree-visualizer-active-branch-face ((t (:background "#002b36" :foreground "gray95" :weight bold)))))
 
+(use-package windmove
+  :init
+  (global-set-key (kbd "C-x <left>")  'windmove-left)
+  (global-set-key (kbd "C-x <right>") 'windmove-right)
+  (global-set-key (kbd "C-x <up>")    'windmove-up)
+  (global-set-key (kbd "C-x <down>")  'windmove-down))
+
+
 (use-package highlight-symbol
   :diminish highlight-symbol-mode
   :ensure t
