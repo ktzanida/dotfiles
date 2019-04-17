@@ -244,7 +244,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet)))
+    (clj-refactor highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet)))
  '(safe-local-variable-values (quote ((cider-clojure-cli-global-options . "-A:dev")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
