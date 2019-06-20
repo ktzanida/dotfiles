@@ -202,10 +202,10 @@
 ;;setSQL connection
 (setq sql-connection-alist
       '((gt (sql-product 'postgres)
-     (sql-server "localhost")
-     (sql-port 5432)
-     (sql-user "test")
-     (sql-database "gt"))))
+	    (sql-server "localhost")
+	    (sql-port 5432)
+	    (sql-user "test")
+	    (sql-database "gt"))))
 ;; multiple cursors
 (use-package multiple-cursors
   :ensure t
@@ -244,7 +244,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (clj-refactor highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet)))
+    (browse-kill-ring markdown-preview-mode markdown-mode clj-refactor highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet)))
  '(safe-local-variable-values (quote ((cider-clojure-cli-global-options . "-A:dev")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -254,6 +254,8 @@
  '(highlight-symbol-face ((t (:foreground "gray100" :background "#9c7618" :weight semi-bold))))
  '(show-paren-match ((t (:foreground "gray100" :background "#9c7618" :weight bold))))
  '(undo-tree-visualizer-active-branch-face ((t (:background "#002b36" :foreground "gray95" :weight bold)))))
+
+(setq markdown-command "/usr/bin/pandoc")
 
 (use-package windmove
   :init
@@ -287,3 +289,9 @@
    '(highlight-symbol-face ((t (:foreground "gray100" :background "#9c7618" :weight semi-bold))))))
 
 (setq auto-revert-verbose nil)
+
+(use-package browse-kill-ring
+  :ensure t
+  :pin melpa-stable
+  :config
+  (browse-kill-ring-default-keybindings))
