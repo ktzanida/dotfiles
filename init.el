@@ -27,6 +27,12 @@
   (setq ido-file-extensions-order '(".clj" ".cljs" ".tf" ".org" ".el" ".py" ".txt"))
   (ido-mode t))
 
+(use-package ido-completing-read+
+  :ensure t
+  :pin melpa-stable
+  :init
+  (ido-ubiquitous-mode 1))
+
 (use-package ido-vertical-mode
   :ensure t
   :pin melpa-stable
@@ -205,7 +211,8 @@
 	    (sql-server "localhost")
 	    (sql-port 5432)
 	    (sql-user "test")
-	    (sql-database "gt"))))
+	    (sql-database "gt"))
+	))
 ;; multiple cursors
 (use-package multiple-cursors
   :ensure t
@@ -244,7 +251,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (browse-kill-ring markdown-preview-mode markdown-mode clj-refactor highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet)))
+    (ido-completing-read+ browse-kill-ring markdown-preview-mode markdown-mode clj-refactor highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet)))
  '(safe-local-variable-values (quote ((cider-clojure-cli-global-options . "-A:dev")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -295,3 +302,5 @@
   :pin melpa-stable
   :config
   (browse-kill-ring-default-keybindings))
+
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
