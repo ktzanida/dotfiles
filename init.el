@@ -304,3 +304,85 @@
   (browse-kill-ring-default-keybindings))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+
+(setq auto-revert-verbose nil)
+
+(use-package browse-kill-ring
+  :ensure t
+  :pin melpa-stable
+  :config
+  (browse-kill-ring-default-keybindings))
+
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(use-package company
+  :ensure t
+  :pin melpa-stable
+  :diminish company-mode
+  :bind (("<s-SPC>" . company-complete))
+  :init
+  (global-company-mode)
+  (setq company-minimum-prefix-length 2)
+  (setq company-begin-commands
+        '(self-insert-command org-self-insert-command orgtbl-self-insert-command c-scope-operator c-electric-colon c-electric-lt-gt c-electric-slash cljr-slash)))
+
+;;; PYTHON SPECIFIC TOOLS
+(use-package elpy
+  :ensure t
+  :defer t
+
+  :bind (:map python-mode-map
+         ("C-c M-j" . run-python)
+         ("C-M-x" . python-shell-send-def)
+         ("C-c C-v" . ss/python-shell-send-snippet)
+	 ("C-c C-q" . elpy-shell-kill))
+
+  :config
+  (setq python-shell-interpreter "python3")
+
+  :init
+  (advice-add 'python-mode :before 'elpy-enable)
+
+  (defun ss/python-shell-send-snippet ()
+    (interactive)
+    (save-excursion
+      (search-backward "##")
+      (end-of-line)
+      (set-mark-command nil)
+      (search-forward "##")
+      (call-interactively 'python-shell-send-region)
+      (deactivate-mark))))
+
+(use-package py-autopep8
+  :ensure t
+  :init (progn
+          (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
+
+;;; MacOS specific settings 1| set command-key to be 'control, |2
+;;; append clojure bin directory to exec-path on startup as it
+;;; apparently loses it
+(setq mac-command-modifier 'meta)
+(setq exec-path (append '("/usr/local/bin"
+			  "Users/ktzanida/bin")
+			exec-path))
+
+;;; AWS
+(defun set-aws-profile ()
+  (interactive)
+  (let ((profile (completing-read "Select profile"
+				  '("development" "production"))))
+    (setenv "AWS_ACCESS_KEY_ID"
+	    (string-trim
+	     (shell-command-to-string
+	      (string-join `("aws configure get "
+			     "aws_access_key_id "
+			     "--profile " ,profile)))))
+    (setenv "AWS_SECRET_ACCESS_KEY"
+	    (string-trim
+	     (shell-command-to-string
+	      (string-join `("aws configure get "
+			     "aws_secret_access_key "
+			     "--profile " ,profile)))))))
+
+(setq python-indent 3)
