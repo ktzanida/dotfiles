@@ -206,13 +206,125 @@
 (setq scroll-conservatively 10000)
 
 ;;setSQL connection
+;; (setq sql-connection-alist
+;;       '((gt (sql-product 'postgres)
+;; 	    (sql-server "localhost")
+;; 	    (sql-port 5432)
+;; 	    (sql-user "test")
+;; 	    (sql-database "gt"))
+;; 	(gt-prod (sql-product 'postgres)
+;; 		 (sql-server "10.128.38.63")
+;; 		 (sql-port 5432)
+;; 		 (sql-user "taz")
+;; 		 (sql-database "gt"))
+;; 	(gt-dev (sql-product 'postgres)
+;; 		 (sql-server "10.128.38.83")
+;; 		 (sql-port 5432)
+;; 		 (sql-user "taz")
+;; 		 (sql-database "gt"))))
+
 (setq sql-connection-alist
-      '((gt (sql-product 'postgres)
-	    (sql-server "localhost")
-	    (sql-port 5432)
-	    (sql-user "test")
-	    (sql-database "gt"))
-	))
+      '((redshift-staging (sql-product 'postgres)
+			  (sql-server "redshift.staging.agentsmutual.co.uk")
+			  (sql-port 5439)
+			  (sql-user "am")
+			  (sql-database "am"))
+	(redshift-staging-otm (sql-product 'postgres)
+			      (sql-server "redshift.staging.agentsmutual.co.uk")
+			      (sql-port 5439)
+			      (sql-user "otm")
+			      (sql-database "am"))
+	(redshift-prod (sql-product 'postgres)
+		       (sql-server "redshift.agentsmutual.co.uk")
+		       (sql-port 5439)
+		       (sql-user "am")
+		       (sql-database "am"))
+	(redshift-prod-otm (sql-product 'postgres)
+			   (sql-server "redshift.agentsmutual.co.uk")
+			   (sql-port 5439)
+			   (sql-user "otm")
+			   (sql-database "am"))
+	(banners-staging (sql-product 'postgres)
+			 (sql-server "postgres-banners.staging.agentsmutual.co.uk")
+			 (sql-port 5432)
+			 (sql-user "banners")
+			 (sql-database "banners"))
+	(banners-prod (sql-product 'postgres)
+		      (sql-server "postgres-banners.agentsmutual.co.uk")
+		      (sql-port 5432)
+		      (sql-user "banners")
+		      (sql-database "banners"))
+	(expert-staging (sql-product 'postgres)
+			(sql-server "postgres.staging.agentsmutual.co.uk")
+			(sql-port 5432)
+			(sql-user "myam")
+			(sql-database "am"))
+	(expert-prod (sql-product 'postgres)
+		     (sql-server "postgres.agentsmutual.co.uk")
+		     (sql-port 5432)
+		     (sql-user "am")
+		     (sql-database "am"))
+	(expert-staging-am (sql-product 'postgres)
+			   (sql-server "postgres.staging.agentsmutual.co.uk")
+			   (sql-port 5432)
+			   (sql-user "am")
+			   (sql-database "am"))
+	(website-staging (sql-product 'postgres)
+			 (sql-server "postgres-otm.staging.agentsmutual.co.uk")
+			 (sql-port 5432)
+			 (sql-user "otm")
+			 (sql-database "otm"))
+	(website-staging-am (sql-product 'postgres)
+			    (sql-server "postgres-otm.staging.agentsmutual.co.uk")
+			    (sql-port 5432)
+			    (sql-user "am")
+			    (sql-database "otm"))
+	(website-prod-am (sql-product 'postgres)
+			 (sql-server "postgres-otm.agentsmutual.co.uk")
+			 (sql-port 5432)
+			 (sql-user "am")
+			 (sql-database "otm"))
+	(pg-analytics-staging (sql-product 'postgres)
+			      (sql-server "postgres-analytics.staging.onthemarket.com")
+			      (sql-port 5432)
+			      (sql-user "warehouse_app_readwrite_user")
+			      (sql-database "analytics"))
+	(pg-analytics-prod (sql-product 'postgres)
+			   (sql-server "postgres-analytics.onthemarket.com")
+			   (sql-port 5432)
+			   (sql-user "warehouse_app_readwrite_user")
+			   (sql-database "analytics"))
+	(market-intel-staging (sql-product 'postgres)
+			      (sql-server "postgres-market-intel.staging.onthemarket.com")
+			      (sql-port 5432)
+			      (sql-user "market_intel")
+			      (sql-database "market_intel"))
+	(market-intel-dev (sql-product 'postgres)
+			  (sql-server "localhost")
+			  (sql-port 5432)
+			  (sql-user "market_intel")
+			  (sql-database "market_intel"))
+	(market-intel-prod (sql-product 'postgres)
+			   (sql-server "postgres-market-intel.onthemarket.com")
+			   (sql-port 5432)
+			   (sql-user "market_intel")
+			   (sql-database "market_intel"))
+	(thingsboard-stg (sql-product 'postgres)
+			 (sql-server "10.8.254.1")
+			 (sql-port 5432)
+			 (sql-user "postgres")
+			 (sql-database "thingsboard"))
+	(thingsboard-prd (sql-product 'postgres)
+			 (sql-server "10.8.0.1")
+			 (sql-port 5432)
+			 (sql-user "postgres")
+			 (sql-database "thingsboard"))
+	(rv-dash-local (sql-product 'postgres)
+		       (sql-server "localhost")
+		       (sql-port 5433)
+		       (sql-user "rv")
+		       (sql-database "rv_dash"))))
+
 ;; multiple cursors
 (use-package multiple-cursors
   :ensure t
@@ -226,7 +338,7 @@
     (mc/edit-lines)))
 
 ;; Line numbering in the margin
-(setq global-linum-mode t)
+(global-linum-mode t)
 
 
 (global-set-key (kbd "C-=") (lambda () (interactive) (text-scale-increase 0.5)))
@@ -250,9 +362,15 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (ido-completing-read+ browse-kill-ring markdown-preview-mode markdown-mode clj-refactor highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet)))
- '(safe-local-variable-values (quote ((cider-clojure-cli-global-options . "-A:dev")))))
+   '(terraform-mode lsp-mode yaml-mode markdown-mode+ py-autopep8 exec-path-from-shell rg w3m ido-completing-read+ browse-kill-ring markdown-preview-mode markdown-mode clj-refactor highlight-symbol expand-region multiple-cursors zprint-mode undo-tree deadgrep use-package s paredit magit ido-vertical-mode doom-themes cider align-cljlet))
+ '(safe-local-variable-values
+   '((cider-clojure-cli-global-options . "-A:fig")
+     (cider-lein-global-options . "with-profile dev")
+     (cider-figwheel-main-default-options . ":dev")
+     (cider-default-cljs-repl . figwheel-main)
+     (cider-clojure-cli-global-options . "-A:dev")))
+ '(show-paren-mode t)
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -305,17 +423,6 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-
-(setq auto-revert-verbose nil)
-
-(use-package browse-kill-ring
-  :ensure t
-  :pin melpa-stable
-  :config
-  (browse-kill-ring-default-keybindings))
-
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
 (use-package company
   :ensure t
   :pin melpa-stable
@@ -333,10 +440,10 @@
   :defer t
 
   :bind (:map python-mode-map
-         ("C-c M-j" . run-python)
-         ("C-M-x" . python-shell-send-def)
-         ("C-c C-v" . ss/python-shell-send-snippet)
-	 ("C-c C-q" . elpy-shell-kill))
+              ("C-c M-j" . run-python)
+              ("C-M-x" . python-shell-send-def)
+              ("C-c C-v" . ss/python-shell-send-snippet)
+	      ("C-c C-q" . elpy-shell-kill))
 
   :config
   (setq python-shell-interpreter "python3")
@@ -359,6 +466,19 @@
   :init (progn
           (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
 
+;; (use-package inferior-python
+;;   :bind (:map inferior-python-mode-map
+;;          ("C-c C-q" . ss/python-kill-buffer))
+;;   :init
+;;   (defun ss/python-kill-buffer ()
+;;     (interactive)
+;;     (kill-buffer (buffer-name (current-buffer)))))
+
+;; (setq python-shell-interpreter "python3")
+
+;; (setq python-shell-interpreter "ipython"
+;;       python-shell-interpreter-args "--simple-prompt -i")
+
 ;;; MacOS specific settings 1| set command-key to be 'control, |2
 ;;; append clojure bin directory to exec-path on startup as it
 ;;; apparently loses it
@@ -367,11 +487,30 @@
 			  "Users/ktzanida/bin")
 			exec-path))
 
-;;; AWS
-(defun set-aws-profile ()
+;;; Agents Mutual SPECIFIC CONFIGURATION
+;; (defun set-aws-profile ()
+;;   (interactive)
+;;   (let ((profile (completing-read "Select profile"
+;; 				  '("development" "production"))))
+;;     (setenv "AWS_ACCESS_KEY_ID"
+;; 	    (string-trim
+;; 	     (shell-command-to-string
+;; 	      (string-join `("aws configure get "
+;; 			     "aws_access_key_id "
+;; 			     "--profile " ,profile)))))
+;;     (setenv "AWS_SECRET_ACCESS_KEY"
+;; 	    (string-trim
+;; 	     (shell-command-to-string
+;; 	      (string-join `("aws configure get "
+;; 			     "aws_secret_access_key "
+;; 			     "--profile " ,profile)))))))
+
+(defun set-aws-creds ()
   (interactive)
   (let ((profile (completing-read "Select profile"
-				  '("development" "production"))))
+				  '("dev" "prd"))))
+    (setenv "AWS_DEFAULT_REGION" "eu-west-1")
+    (setenv "AWS_PROFILE" profile)
     (setenv "AWS_ACCESS_KEY_ID"
 	    (string-trim
 	     (shell-command-to-string
@@ -383,6 +522,43 @@
 	     (shell-command-to-string
 	      (string-join `("aws configure get "
 			     "aws_secret_access_key "
+			     "--profile " ,profile)))))
+    (setenv "AWS_SESSION_TOKEN"
+	    (string-trim
+	     (shell-command-to-string
+	      (string-join `("aws configure get "
+			     "aws_session_token "
 			     "--profile " ,profile)))))))
 
+(defun set-aws-profile ()
+  (interactive)
+  (let ((profile (completing-read "Select profile"
+				  '("dev"))))
+    (setenv "AWS_PROFILE" profile)))
+
+(defun set-am-profile ()
+  (interactive)
+  (let ((profile (completing-read "Select profile"
+				  '("test" "local" "dev" "staging" "prod"))))
+    (setenv "AM_PROFILE" profile)))
+
 (setq python-indent 3)
+
+;;; EMACS CONFIGURATION
+(set-frame-font "Menlo 14" nil t)
+
+;;; TERRAFORM
+(use-package terraform-mode
+  ;; if using straight
+  ;; :straight t
+
+  ;; if using package.el
+  ;; :ensure t
+  :custom (terraform-indent-level 4)
+  :config
+  (defun my-terraform-mode-init ()
+    ;; if you want to use outline-minor-mode
+    ;; (outline-minor-mode 1)
+    )
+
+  (add-hook 'terraform-mode-hook 'my-terraform-mode-init))
